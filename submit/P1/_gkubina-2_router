@@ -11,8 +11,5 @@ RUN chown frr:frr /etc/frr/frr.conf /etc/frr/daemons
 # Expose ports (BGP, OSPF, etc.) if needed
 EXPOSE 179 2604 2605
 
-# Start FRR in foreground so GNS3 can keep the container alive
-ENTRYPOINT ["/usr/lib/frr/frrinit.sh", "start", "-d"]
-
-# Default command: launch vtysh (interactive shell)
-CMD ["vtysh"]
+# Start FRR and keep container alive for console access
+CMD ["/bin/sh", "-c", "/usr/lib/frr/frrinit.sh start && exec /bin/sh"]

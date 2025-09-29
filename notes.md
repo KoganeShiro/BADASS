@@ -62,3 +62,4 @@ https://docs.gns3.com/docs/getting-started/setup-wizard-gns3-vm
 https://docs.gns3.com/docs/getting-started/your-first-gns3-topology
 
 Use the GNS3 VM on Windows and Mac OS. It’s optional, but not required, when running GNS3 natively in Linux.
+
