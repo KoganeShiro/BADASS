@@ -1,0 +1,21 @@
+FROM alpine:latest
+
+# Install FRRouting (routing daemons) and busybox
+RUN apk add --no-cache \
+      frr \
+      frr-bgpd \
+      frr-ospfd \
+      frr-isisd \
+      busybox
+
+# Enable FRR daemons (bgpd, ospfd, isisd)
+RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
+    sed -i 's/ospfd=no/ospfd=yes/' /etc/frr/daemons && \
+    sed -i 's/isisd=no/isisd=yes/' /etc/frr/daemons
+
+# Copy FRR config files into the container
+COPY frr.conf /etc/frr/frr.conf
+COPY daemons /etc/frr/daemons
+
+# Run FRR on container start
+CMD ["/usr/lib/frr/frrinit.sh", "start"]
