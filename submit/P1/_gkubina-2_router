@@ -1,21 +1,18 @@
-FROM alpine:latest
-
-# Install FRRouting (routing daemons) and busybox
-RUN apk add --no-cache \
-      frr \
-      frr-bgpd \
-      frr-ospfd \
-      frr-isisd \
-      busybox
-
-# Enable FRR daemons (bgpd, ospfd, isisd)
-RUN sed -i 's/bgpd=no/bgpd=yes/' /etc/frr/daemons && \
-    sed -i 's/ospfd=no/ospfd=yes/' /etc/frr/daemons && \
-    sed -i 's/isisd=no/isisd=yes/' /etc/frr/daemons
+# Use the official FRRouting image
+FROM frrouting/frr:latest
 
 # Copy FRR config files into the container
 COPY frr.conf /etc/frr/frr.conf
 COPY daemons /etc/frr/daemons
 
-# Run FRR on container start
-CMD ["/usr/lib/frr/frrinit.sh", "start"]
+# Set permissions (FRR runs as user frr)
+RUN chown frr:frr /etc/frr/frr.conf /etc/frr/daemons
+
+# Expose ports (BGP, OSPF, etc.) if needed
+EXPOSE 179 2604 2605
+
+# Start FRR in foreground so GNS3 can keep the container alive
+ENTRYPOINT ["/usr/lib/frr/frrinit.sh", "start", "-d"]
+
+# Default command: launch vtysh (interactive shell)
+CMD ["vtysh"]
