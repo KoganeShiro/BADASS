@@ -29,8 +29,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth0",
-                            "x": 54,
-                            "y": 5
+                            "x": 67,
+                            "y": -1
                         },
                         "node_id": "d3e5085a-68f4-43ed-83a7-10f6e127d64a",
                         "port_number": 0
@@ -41,8 +41,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "e0",
-                            "x": 6,
-                            "y": 43
+                            "x": -50,
+                            "y": 33
                         },
                         "node_id": "a5ffc397-da2f-44f6-b7a7-33839ec34331",
                         "port_number": 0
@@ -61,8 +61,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth0",
-                            "x": 3,
-                            "y": 0
+                            "x": -42,
+                            "y": -4
                         },
                         "node_id": "7e0b98d9-2397-40e1-bdbe-f627d6ca8816",
                         "port_number": 0
@@ -73,8 +73,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "e1",
-                            "x": 57,
-                            "y": 49
+                            "x": 96,
+                            "y": 24
                         },
                         "node_id": "a5ffc397-da2f-44f6-b7a7-33839ec34331",
                         "port_number": 1
@@ -93,8 +93,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth1",
-                            "x": 18,
-                            "y": 72
+                            "x": -38,
+                            "y": 73
                         },
                         "node_id": "d3e5085a-68f4-43ed-83a7-10f6e127d64a",
                         "port_number": 0
@@ -105,8 +105,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth0",
-                            "x": 39,
-                            "y": -9
+                            "x": -3,
+                            "y": -38
                         },
                         "node_id": "0eed51fd-cf4a-4965-b9a3-b52b2a458d78",
                         "port_number": 0
@@ -125,8 +125,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth1",
-                            "x": 31,
-                            "y": 72
+                            "x": 47,
+                            "y": 75
                         },
                         "node_id": "7e0b98d9-2397-40e1-bdbe-f627d6ca8816",
                         "port_number": 0
@@ -137,8 +137,8 @@
                             "rotation": 0,
                             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                             "text": "eth0",
-                            "x": 26,
-                            "y": -10
+                            "x": 39,
+                            "y": -39
                         },
                         "node_id": "cf584da4-0f23-4bcb-8d0f-244783847e22",
                         "port_number": 0
@@ -257,7 +257,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "2b698f6bccee719417bfaf416216e62923cb156ca4f50dd51a930924c5845eff",
+                    "container_id": "24dd63b90e2d24d67934250aabf8f22ad041836a2a7e3de9bf54800e54ac1ed8",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [],
@@ -300,7 +300,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "c36ce8ab5dc786ddb64c833b5885eeb0b861e42bcf10573db55e08e9c314d0e2",
+                    "container_id": "1f8fb732e0e4ee7075fd53d27e290cb1277511c3c36fb96a70e2a9b26816c143",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [],
@@ -328,8 +328,8 @@
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                     "text": "router_gkubina-1",
-                    "x": -34,
-                    "y": -25
+                    "x": -117,
+                    "y": 11
                 },
                 "locked": false,
                 "name": "router_gkubina-1",
@@ -343,7 +343,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "82ea33b948e21b83f3d5271fe9a3ed675061e0d6fa152e632d3f1911d40a0963",
+                    "container_id": "8e2791e28457ddf6cc0e421c3825d1771c33e3ab513605cc3dea74380b49eace",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
@@ -373,8 +373,8 @@
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                     "text": "router_gkubina-2",
-                    "x": -34,
-                    "y": -25
+                    "x": 53,
+                    "y": 16
                 },
                 "locked": false,
                 "name": "router_gkubina-2",
@@ -388,7 +388,7 @@
                     "console_http_path": "/",
                     "console_http_port": 80,
                     "console_resolution": "1024x768",
-                    "container_id": "0bdff538bc772f61a2ddcfa57bae044af901ce1baa40f71547ddd15236ccf084",
+                    "container_id": "130999d8aac46f76d0dfad8e7d92a598992c00ca5db23886ff93fb4b0b8b6a0a",
                     "environment": null,
                     "extra_hosts": null,
                     "extra_volumes": [
