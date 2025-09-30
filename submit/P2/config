@@ -1,0 +1,125 @@
+# both routers 
+
+# ip link add name br0 type bridge
+# ip link add link eth0 name eth0.10 type vlan id 10
+# ip link add link eth1 name eth1.10 type vlan id 10
+
+# ip link set eth0.10 master br0
+# ip link set eth1.10 master br0
+
+# ip link set br0 up
+# ip link set eth0 up
+# ip link set eth1 up
+# ip link set eth0.10 up
+# ip link set eth1.10 up
+
+
+# host1:
+
+# # Create VLAN 10 on eth0
+# ip link add link eth0 name eth0.10 type vlan id 10
+
+# # Bring it up
+# ip link set dev eth0.10 up
+
+# # Assign IP address
+# ip addr add 30.1.1.1/24 dev eth0.10
+
+# host2:
+
+# # Create VLAN 10 on eth0
+# ip link add link eth0 name eth0.10 type vlan id 10
+
+# # Bring it up
+# ip link set dev eth0.10 up
+
+# # Assign IP address
+# ip addr add 30.1.1.2/24 dev eth0.10
+
+
+Router A (eth: 192.168.100.1) <--- IP underlay ---> Router B (eth1: 192.168.100.2)
+
+eth0 (LAN side) ⟷ VXLAN tunnel ⟷ eth0 (LAN side)
+
+On Router A
+# 1. Assign underlay IP to eth0 (physical interface between routers)
+ip addr add 192.168.100.1/24 dev eth0
+ip link set eth0 up
+
+# 2. Create bridge for LAN + VXLAN
+ip link add name br0 type bridge
+ip link set br0 up
+
+# 3. Add LAN interface to bridge
+ip link set eth1 master br0
+ip link set eth1 up
+
+# 4. Create VXLAN interface (VNI 10) pointing to Router B
+ip link add vxlan10 type vxlan id 10 dev eth0 remote 192.168.100.2 dstport 4789
+ip link set vxlan10 up
+
+# 5. Add VXLAN interface to bridge
+ip link set vxlan10 master br0
+
+
+
+On Router B
+
+# 1. Assign underlay IP to eth0
+ip addr add 192.168.100.2/24 dev eth0
+ip link set eth0 up
+
+# 2. Create bridge
+ip link add name br0 type bridge
+ip link set br0 up
+
+# 3. Add LAN interface to bridge
+ip link set eth1 master br0
+ip link set eth1 up
+
+# 4. Create VXLAN interface pointing to Router A
+ip link add vxlan10 type vxlan id 10 dev eth0 remote 192.168.100.1 dstport 4789
+ip link set vxlan10 up
+
+# 5. Add VXLAN interface to bridge
+ip link set vxlan10 master br0
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Create the bridge interface
+ip link add name br0 type bridge
+
+# Bring it up
+ip link set dev br0 up
+
+
+
+vtysh
+
+configure terminal
+ bridge br0
+  bridge vlan-aware
+  bridge vlan 10
+ exit
+
+interface eth0
+ bridge br0
+ bridge-access 10
+ exit
+
+interface eth1
+ bridge br0
+ bridge-access 10
+ exit
+
+write 
