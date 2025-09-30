@@ -63,3 +63,21 @@ Result: Router1 learns about all routers and networks in the IS-IS domain.
 OSPF and IS-IS are dynamic: Router1 doesn’t need static configuration of Router2/Router3’s addresses. It just knows, “I’m running this protocol on this interface, so I’ll talk to whoever else is here.”
 
 Router1 maintains a routing database (separate for OSPF and IS-IS) and passes the final routes into the kernel routing table via Zebra.
+
+
+FRRouting (FRR)?
+
+FRRouting (short: FRR) is an open-source IP routing software suite.
+
+It runs on Linux and turns your machine (or Docker container) into a fully functional router.
+
+It implements routing protocols just like commercial routers (Cisco, Juniper, etc.).
+
+FRR daemons → each protocol (BGP, OSPF, IS-IS) runs as its own daemon. They exchange routes with neighbors.
+    BGP (Border Gateway Protocol) → used for Internet-scale routing between autonomous systems.
+    OSPFv2 / OSPFv3 (Open Shortest Path First) → used inside organizations (IGP).
+    IS-IS (Intermediate System to Intermediate System) → another IGP, often in ISPs.
+
+Zebra daemon → acts as the “brain,” taking the best routes from each protocol and pushing them into the kernel routing table.
+
+vtysh is FRR’s all-in-one CLI shell that looks like Cisco/Juniper syntax. It’s how you interactively configure your FRR routers inside Docker or GNS3.
