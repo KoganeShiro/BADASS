@@ -213,11 +213,6 @@ ping 30.1.1.2
 ping 30.1.1.1
 ```
 
-### Monitor VXLAN Traffic
-```bash
-# Capture VXLAN traffic
-tcpdump -i eth0 port 4789 -v
-```
 
 ## Key Features
 
