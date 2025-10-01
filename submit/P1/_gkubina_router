@@ -40,18 +40,35 @@ RUN cat > /etc/frr/frr.conf <<EOF
 !
 frr defaults traditional
 log syslog informational
+no ipv6 forwarding
 service integrated-vtysh-config
 !
 line vty
 !
+!
+! =========================
+! BGP CONFIGURATION
+! =========================
+router bgp 65001
+ bgp router-id 1.1.1.1
+!
+!
+! =========================
+! OSPF CONFIGURATION
+! =========================
+router ospf
+ ospf router-id 2.2.2.2
+!
+! =========================
+! IS-IS CONFIGURATION
+! =========================
+router isis CORE
+ net 49.0001.0000.0000.0001.00
+!
+end
 EOF
 
 # Ensure frrinit.sh is executable
 RUN chmod +x /usr/lib/frr/frrinit.sh
 
-# Start only the daemons you need, keep container alive
-CMD ["/bin/sh", "-c", "/usr/lib/frr/zebra -d -F traditional -A 127.0.0.1 -s 90000000 && \
-                        /usr/lib/frr/bgpd -d -F traditional -A 127.0.0.1 && \
-                        /usr/lib/frr/ospfd -d -F traditional -A 127.0.0.1 && \
-                        /usr/lib/frr/isisd -d -F traditional -A 127.0.0.1 && \
-                        tail -f /dev/null"]
+CMD ["/bin/sh", "-c", "/usr/lib/frr/frrinit.sh start && tail -f /dev/null"]

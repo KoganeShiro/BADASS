@@ -155,7 +155,7 @@ dynamic_router_b() {
 if [ "$1" == "static" ]; then
     echo "Starting static configuration..."
     containers=$(docker ps --format "{{.Names}}")
-    for container in $con!icmpv6tainers; do
+    for container in $containers; do
         echo "Configuring container: $container"
         hostname=$(docker exec -it "$container" hostname | tr -d '\r\n' | tr -d ' ')
         echo "Hostname: '$hostname'"
