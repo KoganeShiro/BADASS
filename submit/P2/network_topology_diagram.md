@@ -37,9 +37,9 @@ This document describes the VXLAN network topology for Project 2, showing the co
 | Device    | Interface | IP Address      | Network         | Description      |
 |-----------|-----------|-----------------|-----------------|------------------|
 | Router A  | eth0      | 192.168.100.1   | 192.168.100.0/24| Underlay Network |
-| Router A  | eth1      | -               | Bridge br0       | LAN Interface    |
+| Router A  | eth1      | -               | Bridge br0      | LAN Interface    |
 | Router B  | eth0      | 192.168.100.2   | 192.168.100.0/24| Underlay Network |
-| Router B  | eth1      | -               | Bridge br0       | LAN Interface    |
+| Router B  | eth1      | -               | Bridge br0      | LAN Interface    |
 | Host 1    | eth0      | 30.1.1.1/24     | 30.1.1.0/24     | Overlay Network  |
 | Host 2    | eth0      | 30.1.1.2/24     | 30.1.1.0/24     | Overlay Network  |
 
@@ -115,11 +115,14 @@ ip link set eth1 master br0
 ip link set eth1 up
 
 # 4. Create VXLAN interface
-ip link add vxlan10 type vxlan id 10 dev eth0 remote 192.168.100.2 dstport 4789
+ip link add vxlan10 type vxlan id 10 dev eth0 local 192.168.100.1 remote 192.168.100.2 dstport 4789
 ip link set vxlan10 up
 
 # 5. Add VXLAN interface to bridge
 ip link set vxlan10 master br0
+
+# 6.Add default FDB entry
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 192.168.100.2
 ```
 
 ### Router B Configuration
@@ -138,11 +141,14 @@ ip link set eth1 master br0
 ip link set eth1 up
 
 # 4. Create VXLAN interface
-ip link add vxlan10 type vxlan id 10 dev eth0 remote 192.168.100.1 dstport 4789
+ip link add vxlan10 type vxlan id 10 dev eth0 local 192.168.100.2 remote 192.168.100.1 dstport 4789
 ip link set vxlan10 up
 
 # 5. Add VXLAN interface to bridge
 ip link set vxlan10 master br0
+
+# 6.Add default FDB entry
+bridge fdb append 00:00:00:00:00:00 dev vxlan10 dst 192.168.100.1
 ```
 
 ### Host Configurations
