@@ -1,0 +1,16 @@
+Oct 01 07:16:15.386 HYPERVISOR: Release 0.2.23-amd64/Linux (tag 2023010200)
+Oct 01 07:16:15.386 HYPERVISOR: Started on IP = 127.0.0.1, TCP port = 57111.
+Oct 01 07:16:15.388 HYPERVISOR: exec_cmd: hypervisor version 
+Oct 01 07:16:15.388 HYPERVISOR: exec_cmd: hypervisor working_dir /media/sf_BADASS/P2/P2/project-files/dynamips 
+Oct 01 07:16:15.389 GENERAL: working_dir=/media/sf_BADASS/P2/P2/project-files/dynamips
+Oct 01 07:16:15.389 HYPERVISOR: exec_cmd: ethsw create Switch_gkubina 
+Oct 01 07:18:35.606 HYPERVISOR: exec_cmd: nio create_udp udp-341160b4-1258-4250-8c04-64672376a20c 10005 127.0.0.1 10004 
+Oct 01 07:18:35.606 HYPERVISOR: exec_cmd: ethsw add_nio Switch_gkubina udp-341160b4-1258-4250-8c04-64672376a20c 
+Oct 01 07:18:35.619 HYPERVISOR: exec_cmd: ethsw set_access_port Switch_gkubina udp-341160b4-1258-4250-8c04-64672376a20c 1 
+Oct 01 07:18:39.603 HYPERVISOR: exec_cmd: nio create_udp udp-a4376494-4d71-4360-ba96-f12cf422f205 10007 127.0.0.1 10006 
+Oct 01 07:18:39.604 HYPERVISOR: exec_cmd: ethsw add_nio Switch_gkubina udp-a4376494-4d71-4360-ba96-f12cf422f205 
+Oct 01 07:18:39.624 HYPERVISOR: exec_cmd: ethsw set_access_port Switch_gkubina udp-a4376494-4d71-4360-ba96-f12cf422f205 1 
+Oct 01 08:51:25.222 HYPERVISOR: exec_cmd: ethsw delete Switch_gkubina 
+Oct 01 08:51:25.251 HYPERVISOR: exec_cmd: hypervisor stop 
+Oct 01 08:51:25.364 HYPERVISOR: Stopped.
+Oct 01 08:51:25.364 GENERAL: reset done.
