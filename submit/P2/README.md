@@ -29,3 +29,4 @@ You must use correct and consistent names for your equipment here
 with the login of one of the group members.
 
 
+in order to use ip -d, use the ip inside /sbin/ip
