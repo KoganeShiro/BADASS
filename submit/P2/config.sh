@@ -1,4 +1,4 @@
-#!/bin/busybox sh
+#!/bin/sh
 
 static_host_a() {
     local container_name="$1"
