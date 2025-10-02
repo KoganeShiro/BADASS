@@ -82,7 +82,7 @@ The implementation follows a spine-leaf architecture with a central route reflec
 ### Configure Interfaces on RR and Leaf Routers:
 
 RR Router:
-
+/bin/sh
 ip addr del dev eth0 2>/dev/null || true &&
 ip addr add 10.1.1.1/30 dev eth0 &&
 ip link set eth0 up &&
@@ -99,7 +99,7 @@ ip addr add 1.1.1.1/32 dev lo &&
 ip link set lo up
 
 Leaf Router-1:
-
+/bin/sh
 ip addr del dev eth0 2>/dev/null || true &&
 ip addr add 10.1.1.2/30 dev eth0 &&
 ip link set eth0 up &&
@@ -108,7 +108,7 @@ ip addr add 1.1.1.2/32 dev lo &&
 ip link set lo up 
 
 Leaf Router-2:
-
+/bin/sh
 ip addr del dev eth0 2>/dev/null || true &&
 ip addr add 10.1.1.6/30 dev eth0 &&
 ip link set eth0 up &&
@@ -117,7 +117,7 @@ ip addr add 1.1.1.3/32 dev lo &&
 ip link set lo up 
 
 Leaf Router-3:
-
+/bin/sh
 ip addr del dev eth0 2>/dev/null || true &&
 ip addr add 10.1.1.10/30 dev eth0 &&
 ip link set eth0 up &&
@@ -133,7 +133,7 @@ ip link set lo up
 Configure OSPF on all devices to establish IP reachability:
 
 #### Route Reflector OSPF Configuration:
-```bash
+```vtysh
 # /etc/frr/ospfd.conf
 router ospf
  ospf router-id 1.1.1.1
@@ -264,7 +264,9 @@ router bgp 64512
 
 #### Configure VXLAN Interface on Leaf Routers:
 ```bash
+
 # Router-1 VXLAN configuration
+/bin/sh 
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
@@ -283,6 +285,7 @@ ip link set br10 up
 
 ```bash
 # Router-2 VXLAN configuration  
+/bin/sh 
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
@@ -298,6 +301,7 @@ ip link set br10 up
 
 ```bash
 # Router-3 VXLAN configuration
+/bin/sh 
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
