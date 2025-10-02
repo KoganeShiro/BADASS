@@ -13,42 +13,42 @@ The implementation follows a spine-leaf architecture with a central route reflec
                     OSPF + BGP on loopbacks
                    eth0/     eth1/     eth2/
                       /        |        \
-                  e0/        e1|       e2 \
+                  e0/        e0|       e0 \
               [Router-1]   [Router-2]   [Router-3]
               (Leaf VTEP)  (Leaf VTEP)  (Leaf VTEP)
                    |           |           |
-                  eth1        eth0        eth0
+                  e1           e1          e1
                    |           |           |
-                 eth1        eth0         eht0
+                  e0            e0         e0
               [Host-1]     [Host-2]     [Host-3]
 ```
 
 ### Physical Connections
-
+!!!! ---> simplifier les noms des interfaces....
 - **Route Reflector (RR)**:
   - `eth0` → connected to Router-1 `e0`
-  - `eth1` → connected to Router-2 `e1`
-  - `eth2` → connected to Router-3 `e2`
-  - `lo0` → loopback for BGP/OSPF router-id
+  - `eth1` → connected to Router-2 `e0`
+  - `eth2` → connected to Router-3 `e0`
+  - `lo` → loopback for BGP/OSPF router-id
 
 - **Leaf Routers (VTEPs)**:
   - **Router-1**: 
     - `e0` → connected to RR `eth0` (uplink)
-    - `eth1` → connected to Host-1 `eth1`
-    - `lo0` → loopback for VXLAN tunnel endpoint
+    - `e1` → connected to Host-1 `eth1`
+    - `lo` → loopback for VXLAN tunnel endpoint
   - **Router-2**:
-    - `e1` → connected to RR `eth1` (uplink)
-    - `eth0` → connected to Host-2 `eth0`
-    - `lo0` → loopback for VXLAN tunnel endpoint
+    - `e0` → connected to RR `eth0` (uplink)
+    - `e1` → connected to Host-2 `eth1`
+    - `lo` → loopback for VXLAN tunnel endpoint
   - **Router-3**:
-    - `e2` → connected to RR `eth2` (uplink)
-    - `eth0` → connected to Host-3 `eth0`
-    - `lo0` → loopback for VXLAN tunnel endpoint
+    - `e0` → connected to RR `eth0` (uplink)
+    - `e1` → connected to Host-3 `eth1`
+    - `lo` → loopback for VXLAN tunnel endpoint
 
 - **Hosts**:
-  - **Host-1**: `eth1` connected to Router-1 `eth1`
-  - **Host-2**: `eth0` connected to Router-2 `eth0`  
-  - **Host-3**: `eth0` connected to Router-3 `eth0`
+  - **Host-1**: `eth0` connected to Router-1 `eth1`
+  - **Host-2**: `eth0` connected to Router-2 `eth1`  
+  - **Host-3**: `eth0` connected to Router-3 `eth1`
 
 ### Equipment Requirements
 
@@ -61,23 +61,71 @@ The implementation follows a spine-leaf architecture with a central route reflec
 
 1. **IP Address Allocation**:
    - **Loopback addresses**:
-     - Route Reflector: 1.1.1.100/32
-     - Router-1: 1.1.1.1/32
-     - Router-2: 1.1.1.2/32  
-     - Router-3: 1.1.1.3/32
+     - Route Reflector: 1.1.1.1/32 
+     - Router-1: 1.1.1.2/32 
+     - Router-2: 1.1.1.3/32 
+     - Router-3: 1.1.1.4/32 
    - **Point-to-point links** (RR to Routers):
-     - RR eth0 ↔ Router-1: 10.0.1.0/30
-     - RR eth1 ↔ Router-2: 10.0.2.0/30
-     - RR eth2 ↔ Router-3: 10.0.3.0/30
+     - RR eth0 ↔ Router-1: 10.1.1.0/30 !!  1 + 2
+     - RR eth1 ↔ Router-2: 10.1.1.4/30 !! 5 + 6
+     - RR eth2 ↔ Router-3: 10.1.1.8/30 !!  9 + 10
    - **Host networks**:
-     - Router-1 eth0 ↔ Host-1: 192.168.10.0/24
-     - Router-2 eth0 ↔ Host-2: 192.168.20.0/24
-     - Router-3 eth0 ↔ Host-3: 192.168.30.0/24
+     - Router-1 eth0 ↔ Host-1: 20.1.1.0/24  
+     - Router-2 eth0 ↔ Host-2: 20.1.1.0/24 
+     - Router-3 eth0 ↔ Host-3: 20.1.1.0/24 
    - **VXLAN Network Identifier (VNI)**: 10
 
 2. **BGP AS Numbers**:
-   - AS 65000 for all devices (iBGP)
+   - AS 64512 for all devices (iBGP) !!! 64512 is a privat AS
    - Route reflection between RR and all leaf routers
+
+### Configure Interfaces on RR and Leaf Routers:
+
+RR Router:
+
+ip addr del dev eth0 2>/dev/null || true &&
+ip addr add 10.1.1.1/30 dev eth0 &&
+ip link set eth0 up &&
+
+ip addr del dev eth1 2>/dev/null || true &&
+ip addr add 10.1.1.5/30 dev eth1 &&
+ip link set eth1 up &&
+
+ip addr del dev eth2 2>/dev/null || true &&
+ip addr add 10.1.1.9/30 dev eth2 &&
+ip link set eth2 up &&
+
+ip addr add 1.1.1.1/32 dev lo &&
+ip link set lo up
+
+Leaf Router-1:
+
+ip addr del dev eth0 2>/dev/null || true &&
+ip addr add 10.1.1.2/30 dev eth0 &&
+ip link set eth0 up &&
+
+ip addr add 1.1.1.2/32 dev lo &&
+ip link set lo up 
+
+Leaf Router-2:
+
+ip addr del dev eth0 2>/dev/null || true &&
+ip addr add 10.1.1.6/30 dev eth0 &&
+ip link set eth0 up &&
+
+ip addr add 1.1.1.3/32 dev lo &&
+ip link set lo up 
+
+Leaf Router-3:
+
+ip addr del dev eth0 2>/dev/null || true &&
+ip addr add 10.1.1.10/30 dev eth0 &&
+ip link set eth0 up &&
+
+ip addr add 1.1.1.4/32 dev lo &&
+ip link set lo up 
+
+
 
 
 ### Underlay Network Configuration (OSPF)
@@ -88,32 +136,32 @@ Configure OSPF on all devices to establish IP reachability:
 ```bash
 # /etc/frr/ospfd.conf
 router ospf
- ospf router-id 1.1.1.100
- network 1.1.1.100/32 area 0    # Loopback
- network 10.0.1.0/30 area 0     # Link to Router-1
- network 10.0.2.0/30 area 0     # Link to Router-2 
- network 10.0.3.0/30 area 0     # Link to Router-3
+ ospf router-id 1.1.1.1
+ network 1.1.1.1/32 area 0    
+ network 10.1.1.0/30 area 0     # Link to Router-1 
+ network 10.1.1.4/30 area 0     # Link to Router-2 
+ network 10.1.1.8/30 area 0     # Link to Router-3 
 ```
 
 #### Leaf Router OSPF Configuration:
 ```bash
 # Router-1 /etc/frr/ospfd.conf
 router ospf
- ospf router-id 1.1.1.1
- network 1.1.1.1/32 area 0      # Loopback
- network 10.0.1.0/30 area 0     # Link to RR
+ ospf router-id 1.1.1.2
+ network 1.1.1.2/32 area 0      # Loopback 
+ network 10.1.1.0/30 area 0     # Link to RR
 
 # Router-2 /etc/frr/ospfd.conf  
 router ospf
- ospf router-id 1.1.1.2
- network 1.1.1.2/32 area 0      # Loopback
- network 10.0.2.0/30 area 0     # Link to RR
+ ospf router-id 1.1.1.3
+ network 1.1.1.3/32 area 0      # Loopback
+ network 10.1.1.4/30 area 0     # Link to RR
 
 # Router-3 /etc/frr/ospfd.conf
 router ospf
- ospf router-id 1.1.1.3
- network 1.1.1.3/32 area 0      # Loopback
- network 10.0.3.0/30 area 0     # Link to RR
+ ospf router-id 1.1.1.4
+ network 1.1.1.4/32 area 0      # Loopback 
+ network 10.1.1.8/30 area 0     # Link to RR
 ```
 
 ### BGP EVPN Configuration
@@ -121,20 +169,21 @@ router ospf
 #### Route Reflector BGP Configuration:
 ```bash
 # /etc/frr/bgpd.conf
-router bgp 65000
- bgp router-id 1.1.1.100
- no bgp default ipv4-unicast
+no router bgp 65001
+router bgp 64512
+ bgp router-id 1.1.1.1
+ no bgp default ipv4-unicast !! ?
  
  # Configure route reflection for EVPN address family
  neighbor vtep-clients peer-group
- neighbor vtep-clients remote-as 65000
- neighbor vtep-clients update-source lo0
+ neighbor vtep-clients remote-as 64512
+ neighbor vtep-clients update-source lo
  neighbor vtep-clients route-reflector-client
  
  # Add leaf router neighbors
- neighbor 1.1.1.1 peer-group vtep-clients  # Router-1
- neighbor 1.1.1.2 peer-group vtep-clients  # Router-2
- neighbor 1.1.1.3 peer-group vtep-clients  # Router-3
+ neighbor 1.1.1.2 peer-group vtep-clients  # Router-1
+ neighbor 1.1.1.3 peer-group vtep-clients  # Router-2
+ neighbor 1.1.1.4 peer-group vtep-clients  # Router-3
  
  address-family l2vpn evpn
   neighbor vtep-clients activate
@@ -142,24 +191,65 @@ router bgp 65000
  exit-address-family
 ```
 
-#### Leaf Router BGP Configuration (Example for Router-1):
+#### Leaf Router BGP Configuration
+
+Router-1:
 ```bash
 # Router-1 /etc/frr/bgpd.conf
-router bgp 65000
- bgp router-id 1.1.1.1
+router bgp 64512
+ bgp router-id 1.1.1.2
  no bgp default ipv4-unicast
  
  # Configure BGP neighbor to route reflector
- neighbor 1.1.1.100 remote-as 65000
- neighbor 1.1.1.100 update-source lo0
+ neighbor 1.1.1.1 remote-as 64512
+ neighbor 1.1.1.1 update-source lo
  
  address-family l2vpn evpn
-  neighbor 1.1.1.100 activate
+  neighbor 1.1.1.1 activate
   advertise-all-vni
  exit-address-family
 ```
 
+Router-2:
+```bash
+# Router-1 /etc/frr/bgpd.conf
+router bgp 64512
+ bgp router-id 1.1.1.3
+ no bgp default ipv4-unicast
+ 
+ # Configure BGP neighbor to route reflector
+ neighbor 1.1.1.1 remote-as 64512
+ neighbor 1.1.1.1 update-source lo
+ 
+ address-family l2vpn evpn
+  neighbor 1.1.1.1 activate
+  advertise-all-vni
+ exit-address-family
+```
+
+Router-3:
+```bash
+# Router-1 /etc/frr/bgpd.conf
+router bgp 64512
+ bgp router-id 1.1.1.4
+ no bgp default ipv4-unicast
+ 
+ # Configure BGP neighbor to route reflector
+ neighbor 1.1.1.1 remote-as 64512
+ neighbor 1.1.1.1 update-source lo
+ 
+ address-family l2vpn evpn
+  neighbor 1.1.1.1 activate
+  advertise-all-vni
+ exit-address-family
+```
+
+
+
+
 ### VXLAN Configuration
+
+
 
 #### Configure VXLAN Interface on Leaf Routers:
 ```bash
@@ -167,13 +257,13 @@ router bgp 65000
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.1 \
-    nolearning
+    local 1.1.1.2 \ 
+    nolearning 
 
 # Create bridge and add interfaces
 ip link add br10 type bridge
 ip link set vxlan10 master br10
-ip link set eth0 master br10  # Host-facing interface (connected to Host-1)
+ip link set eth1 master br10  # Host-facing interface (connected to Host-1)
 
 # Bring interfaces up
 ip link set vxlan10 up
@@ -185,12 +275,12 @@ ip link set br10 up
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.2 \
+    local 1.1.1.3 \ 
     nolearning
 
 ip link add br10 type bridge
 ip link set vxlan10 master br10
-ip link set eth0 master br10  # Host-facing interface (connected to Host-2)
+ip link set eth1 master br10  # Host-facing interface (connected to Host-2)
 ip link set vxlan10 up
 ip link set br10 up
 ```
@@ -200,12 +290,12 @@ ip link set br10 up
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.3 \
+    local 1.1.1.4 \ 
     nolearning
 
 ip link add br10 type bridge
 ip link set vxlan10 master br10
-ip link set eth0 master br10  # Host-facing interface (connected to Host-3)
+ip link set eth1 master br10  # Host-facing interface (connected to Host-3)
 ip link set vxlan10 up
 ip link set br10 up
 ```
@@ -228,19 +318,19 @@ Configure hosts with basic networking in the same VXLAN segment:
 
 ```bash
 # Host-1 (connected to Router-1 via eth0)
-ip addr add 192.168.100.1/24 dev eth0
+ip addr add 20.1.1.1/24 dev eth0  
 ip link set eth0 up
 
 # Host-2 (connected to Router-2 via eth0)  
-ip addr add 192.168.100.2/24 dev eth0
+ip addr add 20.1.1.3/24 dev eth0 
 ip link set eth0 up
 
 # Host-3 (connected to Router-3 via eth0)
-ip addr add 192.168.100.3/24 dev eth0
+ip addr add 20.1.1.2/24 dev eth0 
 ip link set eth0 up
 ```
 
-**Note**: All hosts are in the same VXLAN segment (VNI 10) and use the same subnet (192.168.100.0/24) to demonstrate L2 connectivity across the VXLAN overlay.
+**Note**: All hosts are in the same VXLAN segment (VNI 10) and use the same subnet (20.1.1.0/24) to demonstrate L2 connectivity across the VXLAN overlay.
 
 ## Verification and Testing
 
@@ -284,7 +374,7 @@ vtysh -c "show evpn mac vni 10"
 
 ### 5. Connectivity Testing
 ```bash
-# From host_wil-1, ping other hosts
-ping 192.168.10.2  # Should reach host_wil-2
-ping 192.168.10.3  # Should reach host_wil-3
+# From host-1, ping other hosts
+ping 20.1.1.2  # Should reach host-2
+ping 20.1.1.3  # Should reach host-3
 ```

@@ -1,0 +1,29 @@
+!
+frr defaults traditional
+log syslog informational
+no ipv6 forwarding
+service integrated-vtysh-config
+!
+line vty
+!
+!
+! =========================
+! BGP CONFIGURATION
+! =========================
+router bgp 65001
+ bgp router-id 1.1.1.1
+!
+!
+! =========================
+! OSPF CONFIGURATION
+! =========================
+router ospf
+ ospf router-id 2.2.2.2
+!
+! =========================
+! IS-IS CONFIGURATION
+! =========================
+router isis CORE
+ net 49.0001.0000.0000.0001.00
+!
+end
