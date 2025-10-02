@@ -1,83 +1,195 @@
-# BADASS
- Bgp At Doors of Autonomous Systems is Simple.  The purpose of this project is to deepen your knowledge of NetPractice. You will have to simulate several networks (VXLAN+BGP-EVPN) in GNS3. 
+# BADASS - BGP At Doors of Autonomous Systems is Simple
 
-## Some protocols
+## 📋 Table of Contents
+- [Project Overview](#project-overview)
+- [Documentation Structure](#documentation-structure)
+- [Project Structure](#project-structure)
+- [Technologies Used](#technologies-used)
+- [Project Parts](#project-parts)
+- [Theory & Concepts](#theory--concepts)
+- [Resources](#resources)
 
-- BGP (Border Gateway Protocol)
+## 🎯 Project Overview
 
-Used between different networks (autonomous systems), e.g. between ISPs.
+**BADASS** is a networking project that explores network architectures. The project involves simulating networks using GNS3 with Docker containers, implementing VXLAN overlay networks, and deploying BGP-EVPN control plane for intelligent MAC learning and traffic distribution.
 
-The protocol of the Internet — it decides how packets move across the globe.
+This project introduces advanced networking concepts including:
+- Network simulation with GNS3
+- Container-based network functions using Docker
+- VXLAN (Virtual Extensible LAN) technology
+- BGP-EVPN (Border Gateway Protocol - Ethernet VPN)
+- Advanced routing protocols (OSPF, IS-IS, BGP)
+---
 
-Policy-driven: you can choose paths based on rules, not just shortest routes.
+## 📚 Documentation Structure
 
-Example: ISP use BGP to exchange routes with other ISPs.
+### 📖 Main Documentation Files
 
-- OSPF (Open Shortest Path First)
+| File | Purpose |
+|------|---------|
+| **README.md** (this file) | Project overview and navigation |
+| **[THEORY.md](THEORY.md)** | Complete theory reference for all concepts |
+| **[P1/README.md](P1/README.md)** | Part 1 implementation guide |
+| **[P2/README.md](P2/README.md)** | Part 2 implementation guide |
+| **[P3/README.md](P3/README.md)** | Part 3 implementation guide |
 
-An interior gateway protocol (IGP) — used inside one organization’s network.
+### 📝 What Each Document Contains
 
-Builds a map of the network using link-state advertisements.
+**THEORY.md - Comprehensive Theory Reference:**
+- Part 1 Theory: Packet routing software, BGPD, OSPFD, Zebra, BusyBox
+- Part 2 Theory: VXLAN vs VLAN, switches, bridges, broadcast vs multicast
+- Part 3 Theory: BGP-EVPN, route reflection, VTEP, VNI, route types
+- Detailed explanations with diagrams and examples
 
-Chooses routes based on the shortest path (Dijkstra’s algorithm).
+**P1/README.md - Part 1 Implementation:**
+- GNS3 and Docker setup
+- Building host and router images
+- Creating basic topology
+- Step-by-step configuration
 
-Fast convergence (reacts quickly to changes).
+**P2/README.md - Part 2 Implementation:**
+- VXLAN tunnel configuration
+- Bridge setup
+- Static VXLAN mode
+- Dynamic multicast VXLAN mode
+- Complete configuration scripts
 
-Example: Used within a data center or company’s internal network.
+**P3/README.md - Part 3 Implementation:**
+- Spine-leaf topology deployment
+- OSPF underlay configuration
+- VTEP and host configuration
+- BGP-EVPN control plane
+- Route reflector setup
+---
 
-When Router1 brings up eth1 and OSPF is enabled on that interface (network 10.1.1.0/24 area 0), it starts sending OSPF Hello packets to the multicast address 224.0.0.5.
+## 📁 Project Structure
 
-Any other router on the subnet running OSPF (Router2, Router3) also sends Hellos.
+```
+BADASS/
+├── README.md                    # This file - Global project documentation
+├── THEORY.md                    # Comprehensive theory documentation (ALL CONCEPTS)
+├── P1/                          # Part 1: GNS3 Configuration with Docker
+│   ├── README.md               # Part 1 complete implementation guide
+│   ├── P1.gns3                 # GNS3 project file
+│   └── build_images.sh        # Script to build Docker images
+├── P2/                          # Part 2: Discovering VXLAN
+│   ├── README.md               # Part 2 complete implementation guide
+│   ├── P2.gns3                 # GNS3 project file
+│   ├── config_static.sh        # Static VXLAN configuration script
+├── P3/                          # Part 3: BGP-EVPN Implementation
+│   ├── README.md               # Part 3 complete implementation guide
+│   ├── P3.gns3                 # GNS3 project file
+│   ├── config_hosts.sh        # Host configuration script
+│   └── config_routers.sh         # RR + VTEP configuration script
+├── notes.md                     # Development notes and installation steps
+```
 
-When they see each other’s Hellos, they form OSPF adjacencies.
+---
 
-After that, they exchange Link State Advertisements (LSAs) to describe the networks they know.
+## 🛠️ Technologies Used
 
-Result: Router1 learns dynamically about all routers and networks in the OSPF domain.
+### Core Technologies
+- **GNS3:** Network simulation platform
+- **Docker:** Container runtime for network functions
+- **FRRouting (FRR):** Open-source routing software suite
 
+### Networking Protocols
+- **VXLAN:** Virtual Extensible LAN (RFC 7348)
+- **BGP:** Border Gateway Protocol (RFC 4271)
+- **BGP-EVPN:** BGP Ethernet VPN (RFC 7432)
+- **OSPF:** Open Shortest Path First
+- **IS-IS:** Intermediate System to Intermediate System
 
-- IS-IS (Intermediate System to Intermediate System)
+---
 
-Another IGP, similar to OSPF, also link-state based.
+### Software Installation
+Install GNS3 and Docker on your local/virtual machine.
+---
 
-Scales very well in large provider networks.
+## 📚 Project Parts
 
-Originally designed for OSI networks, but adapted for IP.
+### Part 1: GNS3 Configuration with Docker
+**Objective:** Set up the simulation environment with containerized network functions
 
-Example: Heavily used by ISPs and telecom operators.
+- Packet routing software concepts
+- Basic host Docker image with BusyBox
+- Router Docker image with FRRouting (BGPD, OSPFD, IS-IS)
+- Simple 2-node GNS3 topology
 
-When Router1 has IS-IS enabled (ip router isis CORE under the interface), it sends IS-IS Hello packets (IIHs) as Ethernet frames to the multicast MAC address reserved for IS-IS (01:80:C2:00:00:14).
+📖 **[Read P1 Implementation Guide](P1/README.md)**
 
-Other routers (Router2, Router3) on the same subnet do the same.
+📚 **[Read P1 Theory](THEORY.md#part-1-gns3--docker-fundamentals)**
 
-Upon receiving Hellos, Router1 forms IS-IS adjacencies.
+---
 
-They exchange Link State PDUs (LSPs), which contain topology and reachability info.
+### Part 2: Discovering VXLAN
+**Objective:** Implement network overlay using VXLAN technology
 
-Result: Router1 learns about all routers and networks in the IS-IS domain.
+**What You'll Learn:**
+- VXLAN vs VLAN differences
+- Linux bridges as virtual switches
+- Broadcast vs Multicast traffic
+- Layer 2 over Layer 3 networking
 
+**Deliverables:**
+- Static VXLAN configuration
+- Bridge configuration 
+- VXLAN with VNI
+- FDB (Forwarding Database) management
 
+📖 **[Read P2 Implementation Guide](P2/README.md)**
 
-🧠 Big Picture
+📚 **[Read P2 Theory](THEORY.md#part-2-vxlan--network-virtualization)**
 
-OSPF and IS-IS are dynamic: Router1 doesn’t need static configuration of Router2/Router3’s addresses. It just knows, “I’m running this protocol on this interface, so I’ll talk to whoever else is here.”
+---
 
-Router1 maintains a routing database (separate for OSPF and IS-IS) and passes the final routes into the kernel routing table via Zebra.
+### Part 3: Discovering BGP with EVPN
+**Objective:** Deploy advanced data center fabric with BGP-EVPN
 
+**What You'll Learn:**
+- BGP-EVPN control plane
+- Route reflection principles
+- VTEP (VXLAN Tunnel Endpoint) operation
+- VNI (VXLAN Network Identifier)
+- Type 2 vs Type 3 routes
 
-FRRouting (FRR)?
+**Deliverables:**
+- Spine-leaf topology with route reflector
+- BGP-EVPN control plane
+- OSPF underlay network
+- Automatic MAC learning (Type 2, Type 3 routes)
 
-FRRouting (short: FRR) is an open-source IP routing software suite.
+📖 **[Read P3 Implementation Guide](P3/README.md)**
 
-It runs on Linux and turns your machine (or Docker container) into a fully functional router.
+📚 **[Read P3 Theory](THEORY.md#part-3-bgp-evpn--data-center-fabric)**
 
-It implements routing protocols just like commercial routers (Cisco, Juniper, etc.).
+---
 
-FRR daemons → each protocol (BGP, OSPF, IS-IS) runs as its own daemon. They exchange routes with neighbors.
-    BGP (Border Gateway Protocol) → used for Internet-scale routing between autonomous systems.
-    OSPFv2 / OSPFv3 (Open Shortest Path First) → used inside organizations (IGP).
-    IS-IS (Intermediate System to Intermediate System) → another IGP, often in ISPs.
+## 🧠 Theory & Concepts
 
-Zebra daemon → acts as the “brain,” taking the best routes from each protocol and pushing them into the kernel routing table.
+### Complete Theory Documentation
 
-vtysh is FRR’s all-in-one CLI shell that looks like Cisco/Juniper syntax. It’s how you interactively configure your FRR routers inside Docker or GNS3.
+All theoretical concepts are compiled in **[THEORY.md](THEORY.md)**.
+
+## 📖 Resources
+
+### Official Documentation
+- [GNS3 Documentation](https://docs.gns3.com/)
+- [FRRouting Documentation](https://docs.frrouting.org/)
+- [Docker Documentation](https://docs.docker.com/)
+
+### RFCs (Standards)
+- [RFC 4271 - BGP-4](https://datatracker.ietf.org/doc/html/rfc4271)
+- [RFC 4760 - MP-BGP](https://datatracker.ietf.org/doc/html/rfc4760)
+- [RFC 7348 - VXLAN](https://datatracker.ietf.org/doc/html/rfc7348)
+- [RFC 7432 - BGP MPLS-Based EVPN](https://datatracker.ietf.org/doc/html/rfc7432)
+- [RFC 4456 - BGP Route Reflection](https://datatracker.ietf.org/doc/html/rfc4456)
+
+### Learning Resources
+- [BGP Fundamentals](https://www.cloudflare.com/learning/security/glossary/what-is-bgp/)
+- [VXLAN Overview](https://www.cisco.com/c/en/us/products/collateral/switches/nexus-9000-series-switches/white-paper-c11-729383.html)
+- [Data Center Network Design](https://www.cisco.com/c/en/us/solutions/data-center/data-center-networking/index.html)
+
+### Community Resources
+- [GNS3 Community](https://community.gns3.com/)
+- [FRRouting GitHub](https://github.com/FRRouting/frr)
