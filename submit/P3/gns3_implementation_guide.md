@@ -144,35 +144,39 @@ router ospf
 ```
 
 #### Leaf Router OSPF Configuration:
-```bash
+```vtysh
 # Router-1 /etc/frr/ospfd.conf
+config terminal
 router ospf
  ospf router-id 1.1.1.2
- network 1.1.1.2/32 area 0      # Loopback 
- network 10.1.1.0/30 area 0     # Link to RR
+ network 1.1.1.2/32 area 0     
+ network 10.1.1.0/30 area 0    
 
 # Router-2 /etc/frr/ospfd.conf  
+config terminal
 router ospf
  ospf router-id 1.1.1.3
- network 1.1.1.3/32 area 0      # Loopback
- network 10.1.1.4/30 area 0     # Link to RR
+ network 1.1.1.3/32 area 0 
+ network 10.1.1.4/30 area 0
 
 # Router-3 /etc/frr/ospfd.conf
+config terminal
 router ospf
  ospf router-id 1.1.1.4
- network 1.1.1.4/32 area 0      # Loopback 
- network 10.1.1.8/30 area 0     # Link to RR
+ network 1.1.1.4/32 area 0 
+ network 10.1.1.8/30 area 0
 ```
 
 ### BGP EVPN Configuration
 
 #### Route Reflector BGP Configuration:
-```bash
+```vtysh
 # /etc/frr/bgpd.conf
+config terminal
 no router bgp 65001
 router bgp 64512
  bgp router-id 1.1.1.1
- no bgp default ipv4-unicast !! ?
+ no bgp default ipv4-unicast 
  
  # Configure route reflection for EVPN address family
  neighbor vtep-clients peer-group
@@ -194,8 +198,10 @@ router bgp 64512
 #### Leaf Router BGP Configuration
 
 Router-1:
-```bash
+```vtysh
 # Router-1 /etc/frr/bgpd.conf
+config terminal
+no router bgp 65001
 router bgp 64512
  bgp router-id 1.1.1.2
  no bgp default ipv4-unicast
@@ -211,8 +217,11 @@ router bgp 64512
 ```
 
 Router-2:
-```bash
-# Router-1 /etc/frr/bgpd.conf
+```vtysh
+# Router-1 /etc/frr/bgpd.conip addr add 20.1.1.1/24 dev eth0  
+ip link set eth0 upf
+config terminal
+no router bgp 65001
 router bgp 64512
  bgp router-id 1.1.1.3
  no bgp default ipv4-unicast
@@ -228,8 +237,10 @@ router bgp 64512
 ```
 
 Router-3:
-```bash
+```vtysh
 # Router-1 /etc/frr/bgpd.conf
+config terminal
+no router bgp 65001
 router bgp 64512
  bgp router-id 1.1.1.4
  no bgp default ipv4-unicast
@@ -257,7 +268,7 @@ router bgp 64512
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.2 \ 
+    local 1.1.1.2 \
     nolearning 
 
 # Create bridge and add interfaces
@@ -275,7 +286,7 @@ ip link set br10 up
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.3 \ 
+    local 1.1.1.3 \
     nolearning
 
 ip link add br10 type bridge
@@ -290,7 +301,7 @@ ip link set br10 up
 ip link add vxlan10 type vxlan \
     id 10 \
     dstport 4789 \
-    local 1.1.1.4 \ 
+    local 1.1.1.4 \
     nolearning
 
 ip link add br10 type bridge
@@ -301,15 +312,16 @@ ip link set br10 up
 ```
 
 #### Enable FRR EVPN for VXLAN:
-```bash
+```vtysh
 # /etc/frr/zebra.conf
+config terminal
 interface vxlan10
  no shutdown
 exit
 
 # Enable BGP EVPN for the VNI
 vni 10
- exit-vni
+ exit-vni !! ?
 ```
 
 ### Host Configuration

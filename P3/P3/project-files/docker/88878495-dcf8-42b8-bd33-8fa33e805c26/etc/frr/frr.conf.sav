@@ -1,29 +1,32 @@
-!
+frr version 8.4_git
 frr defaults traditional
+hostname router_gkubina-2
 log syslog informational
 no ipv6 forwarding
 service integrated-vtysh-config
 !
-line vty
+interface vxlan10
+exit
 !
+router bgp 64512
+ bgp router-id 1.1.1.2
+ no bgp default ipv4-unicast
+ neighbor 1.1.1.1 remote-as 64512
+ neighbor 1.1.1.1 update-source lo
+ !
+ address-family l2vpn evpn
+  neighbor 1.1.1.1 activate
+  advertise-all-vni
+ exit-address-family
+exit
 !
-! =========================
-! BGP CONFIGURATION
-! =========================
-router bgp 65001
- bgp router-id 1.1.1.1
-!
-!
-! =========================
-! OSPF CONFIGURATION
-! =========================
 router ospf
- ospf router-id 2.2.2.2
+ ospf router-id 1.1.1.2
+ network 1.1.1.2/32 area 0
+ network 10.1.1.0/30 area 0
+exit
 !
-! =========================
-! IS-IS CONFIGURATION
-! =========================
 router isis CORE
  net 49.0001.0000.0000.0001.00
+exit
 !
-end
