@@ -1,13 +1,13 @@
 # BADASS - BGP At Doors of Autonomous Systems is Simple
 
 ## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Documentation Structure](#documentation-structure)
-- [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Project Parts](#project-parts)
-- [Theory & Concepts](#theory--concepts)
-- [Resources](#resources)
+- [Project Overview](#-project-overview)
+- [Documentation Structure](#-documentation-structure)
+- [Project Structure](#-project-structure)
+- [Technologies Used](#-technologies-used)
+- [Project Parts](#-project-parts)
+- [Theory & Concepts](#-theory--concepts)
+- [Resources](#-resources)
 
 ## 🎯 Project Overview
 
@@ -69,19 +69,28 @@ BADASS/
 ├── README.md                    # This file - Global project documentation
 ├── THEORY.md                    # Comprehensive theory documentation (ALL CONCEPTS)
 ├── P1/                          # Part 1: GNS3 Configuration with Docker
-│   ├── README.md               # Part 1 complete implementation guide
-│   ├── P1.gns3                 # GNS3 project file
-│   └── build_images.sh        # Script to build Docker images
+│   ├── README.md                # Part 1 complete implementation guide
+│   ├── P1.gns3project           # GNS3 project file
+│   ├── build_images.sh          # Script to build Docker images
+│   ├── _gkubina_host            # Host Docker image files
+│   └── _gkubina_router          # Router Docker image files
 ├── P2/                          # Part 2: Discovering VXLAN
-│   ├── README.md               # Part 2 complete implementation guide
-│   ├── P2.gns3                 # GNS3 project file
-│   ├── config_static.sh        # Static VXLAN configuration script
+│   ├── README.md                # Part 2 complete implementation guide
+│   ├── P2.gns3project           # GNS3 project file
+│   ├── config.sh                # VXLAN configuration script
+│   ├── router1_d.conf           # Router 1 dynamic config
+│   ├── router1_s.conf           # Router 1 static config
+│   ├── router2_d.conf           # Router 2 dynamic config
+│   └── router2_s.conf           # Router 2 static config
 ├── P3/                          # Part 3: BGP-EVPN Implementation
-│   ├── README.md               # Part 3 complete implementation guide
-│   ├── P3.gns3                 # GNS3 project file
-│   ├── config_hosts.sh        # Host configuration script
-│   └── config_routers.sh         # RR + VTEP configuration script
-├── notes.md                     # Development notes and installation steps
+│   ├── README.md                # Part 3 complete implementation guide
+│   ├── P3.gns3project           # GNS3 project file
+│   ├── config_hosts.sh          # Host configuration script
+│   ├── config_routers.sh        # RR + VTEP configuration script
+│   ├── router_leaf1.conf        # Leaf 1 router config
+│   ├── router_leaf2.conf        # Leaf 2 router config
+│   ├── router_leaf3.conf        # Leaf 3 router config
+│   └── router_rr.conf           # Route reflector config
 ```
 
 ---

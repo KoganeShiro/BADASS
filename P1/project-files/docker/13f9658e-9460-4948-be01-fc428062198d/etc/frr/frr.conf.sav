@@ -1,7 +1,0 @@
-!
-frr defaults traditional
-log syslog informational
-service integrated-vtysh-config
-!
-line vty
-!

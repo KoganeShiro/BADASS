@@ -151,22 +151,22 @@ Zebra is the core routing manager in FRRouting that acts as an abstraction layer
 
 ```
 ┌─────────────────────────────────────────────┐
-│           Application Layer                  │
+│           Application Layer                 │
 │    (BGPD, OSPFD, IS-IS, RIPd, etc.)         │
 └──────────────┬──────────────────────────────┘
                │ ZAPI (Zebra API)
 ┌──────────────▼──────────────────────────────┐
-│            ZEBRA Daemon                      │
-│  - Route Selection                           │
-│  - FIB Management                            │
-│  - Interface Management                      │
+│            ZEBRA Daemon                     │
+│  - Route Selection                          │
+│  - FIB Management                           │
+│  - Interface Management                     │
 └──────────────┬──────────────────────────────┘
                │ Netlink
 ┌──────────────▼──────────────────────────────┐
-│         Linux Kernel                         │
-│    - Routing Table (FIB)                     │
-│    - Network Interfaces                      │
-└──────────────────────────────────────────────┘
+│         Linux Kernel                        │
+│    - Routing Table (FIB)                    │
+│    - Network Interfaces                     │
+└─────────────────────────────────────────────┘
 ```
 
 **Key Functions:**
@@ -304,19 +304,19 @@ VXLAN is a Layer 2 overlay network technology that encapsulates Layer 2 Ethernet
 **VXLAN Packet Structure:**
 ```
 ┌──────────────────────────────────────────────────────────┐
-│                    Outer Ethernet Header                  │
-│  Dst MAC (VTEP) | Src MAC (VTEP) | EtherType (0x0800)   │
+│                    Outer Ethernet Header                 │
+│  Dst MAC (VTEP) | Src MAC (VTEP) | EtherType (0x0800)    │
 ├──────────────────────────────────────────────────────────┤
-│                      Outer IP Header                      │
-│  Src IP (VTEP) | Dst IP (VTEP) | Protocol (17 = UDP)    │
+│                      Outer IP Header                     │
+│  Src IP (VTEP) | Dst IP (VTEP) | Protocol (17 = UDP)     │
 ├──────────────────────────────────────────────────────────┤
-│                      Outer UDP Header                     │
-│  Src Port (Random) | Dst Port (4789 - VXLAN)            │
+│                      Outer UDP Header                    │
+│  Src Port (Random) | Dst Port (4789 - VXLAN)             │
 ├──────────────────────────────────────────────────────────┤
-│                       VXLAN Header                        │
-│  Flags | Reserved | VNI (24-bit) | Reserved             │
+│                       VXLAN Header                       │
+│  Flags | Reserved | VNI (24-bit) | Reserved              │
 ├──────────────────────────────────────────────────────────┤
-│                   Original Ethernet Frame                 │
+│                   Original Ethernet Frame                │
 │  Inner Dst MAC | Inner Src MAC | Payload                 │
 └──────────────────────────────────────────────────────────┘
 ```
@@ -425,12 +425,12 @@ A Linux bridge is a virtual Layer 2 device that connects multiple network interf
 **Bridge Components:**
 
 ```
-┌─────────────────────────────────────────────┐
-│            Linux Bridge (br0)                │
-│                                              │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐ │
-│  │   eth1   │  │ vxlan10  │  │   eth2   │ │
-│  └────┬─────┘  └─────┬────┘  └─────┬────┘ │
+┌────────────────────────────────────────────┐
+│            Linux Bridge (br0)              │
+│                                            │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  │
+│  │   eth1   │  │ vxlan10  │  │   eth2   │  │
+│  └────┬─────┘  └─────┬────┘  └─────┬────┘  │
 └───────┼──────────────┼─────────────┼───────┘
         │              │             │
      Local         VXLAN          Other
@@ -526,7 +526,7 @@ A one-to-all communication method where a single packet is sent to every device 
      ▼          ▼          ▼          ▼
 ┌─────────┐┌─────────┐┌─────────┐┌─────────┐
 │ Host 1  ││ Host 2  ││ Host 3  ││ Host 4  │
-│(Receives││(Receives││(Receives││(Receives│
+│ Receives││ Receives││ Receives││ Receives│
 └─────────┘└─────────┘└─────────┘└─────────┘
 ```
 
@@ -559,9 +559,9 @@ A one-to-many communication method where a single packet is sent to a specific g
      │ Multicast (01:00:5E:01:01:01)
      ├──────────┬──────────┐
      ▼          ▼          │
-┌─────────┐┌─────────┐    │        ┌─────────┐
-│ Host 1  ││ Host 2  │    │        │ Host 4  │
-│(Subscrib││(Subscrib│    └────X───│(Not in  │
+┌─────────┐┌─────────┐     │       ┌─────────┐
+│ Host 1  ││ Host 2  │     │       │ Host 4  │
+│(Subscrib││(Subscrib│     └────X──│(Not in  │
 │  ed)    ││  ed)    │             │  group) │
 └─────────┘└─────────┘             └─────────┘
      ▲          ▲
@@ -647,7 +647,7 @@ BGP-EVPN solves these by:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│              BGP-EVPN Control Plane                  │
+│              BGP-EVPN Control Plane                 │
 │   (MAC/IP Routes, VTEP Discovery, ARP Suppression)  │
 └───────────┬─────────────────────────────┬───────────┘
             │                             │
@@ -657,7 +657,7 @@ BGP-EVPN solves these by:
 └───────────┬──────┘           └──────────┬──────────┘
             │                             │
 ┌───────────▼─────────────────────────────▼───────────┐
-│              VXLAN Data Plane                        │
+│              VXLAN Data Plane                       │
 │         (Encapsulated L2 over L3 Network)           │
 └─────────────────────────────────────────────────────┘
 ```
@@ -753,7 +753,7 @@ For 100 routers: 100(99)/2 = 4,950 sessions ❌
         R1 ───────── R2
         │  ╲      ╱  │
         │    ╲  ╱    │
-        │      ╳     │
+        │     ╳      │
         │    ╱  ╲    │
         │  ╱      ╲  │
         R3 ───────── R4
@@ -888,19 +888,19 @@ A VTEP (VXLAN Tunnel Endpoint) is a device that performs VXLAN encapsulation and
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                    VTEP Device                       │
-│                                                      │
-│  ┌────────────────────────────────────────────┐    │
-│  │          Control Plane (BGP-EVPN)          │    │
-│  │  - Learn remote MAC addresses              │    │
-│  │  - Exchange reachability info              │    │
-│  └───────────────┬────────────────────────────┘    │
-│                  │                                   │
-│  ┌───────────────▼────────────────────────────┐    │
-│  │           Data Plane (VXLAN)               │    │
-│  │  - Encapsulation/Decapsulation             │    │
-│  │  - Forwarding table (MAC→VTEP mapping)     │    │
-│  └───────┬──────────────────────────┬─────────┘    │
+│                    VTEP Device                      │
+│                                                     │
+│  ┌────────────────────────────────────────────┐     │
+│  │          Control Plane (BGP-EVPN)          │     │
+│  │  - Learn remote MAC addresses              │     │
+│  │  - Exchange reachability info              │     │
+│  └───────────────┬────────────────────────────┘     │
+│                  │                                  │
+│  ┌───────────────▼────────────────────────────┐     │
+│  │           Data Plane (VXLAN)               │     │
+│  │  - Encapsulation/Decapsulation             │     │
+│  │  - Forwarding table (MAC→VTEP mapping)     │     │
+│  └───────┬──────────────────────────┬─────────┘     │
 │          │                          │               │
 └──────────┼──────────────────────────┼───────────────┘
            │                          │
@@ -1147,7 +1147,7 @@ Type 2 routes advertise MAC addresses (and optionally IP addresses) along with t
 ┌────────────────────────────────────────────────────┐
 │           BGP-EVPN Type 2 Route                    │
 ├────────────────────────────────────────────────────┤
-│ Route Distinguisher (RD):  1.1.1.2:10             │
+│ Route Distinguisher (RD):  1.1.1.2:10              │
 │ VNI:                       10                      │
 │ MAC Address:               aa:bb:cc:dd:ee:01       │
 │ IP Address (optional):     30.1.1.1                │
@@ -1235,7 +1235,7 @@ Type 3 routes advertise VTEP membership in a VNI, enabling VTEP discovery and BU
 ┌────────────────────────────────────────────────────┐
 │           BGP-EVPN Type 3 Route                    │
 ├────────────────────────────────────────────────────┤
-│ Route Distinguisher (RD):  1.1.1.2:10             │
+│ Route Distinguisher (RD):  1.1.1.2:10              │
 │ VNI:                       10                      │
 │ Originating Router IP:     1.1.1.2                 │
 │ Route Target:              64512:10                │
