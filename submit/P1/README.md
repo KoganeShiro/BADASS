@@ -20,7 +20,7 @@ Part 1 establishes the foundation for the entire BADASS project by setting up th
 │   ┌──────────────┐      ┌──────────────┐    │
 │   │   Host-1     │      │   Router-1   │    │
 │   │  (BusyBox)   │      │  (FRRouting) │    │
-│   │  Alpine      │      │   Ubuntu     │    │
+│   │  Alpine      │      │   Alpine     │    │
 │   └──────────────┘      └──────────────┘    │
 │                                             │
 └─────────────────────────────────────────────┘
@@ -52,19 +52,7 @@ See [Wireshark Installation Guide](https://www.wireshark.org/download.html)
 
 ### Step 2: Create Host Docker Image
 
-#### Host Dockerfile
-see `P1/project-files/docker/host/Dockerfile`
-
----
-
-### Step 3: Create Router Docker Image
-
-#### Router Dockerfile
- See `P1/project-files/docker/router/Dockerfile`
-
-### Build Host and router Images
-Run the `build_images.sh` script to build both images.
-
+You can use the script `build_images.sh`
 
 ---
 
@@ -94,13 +82,8 @@ Run the `build_images.sh` script to build both images.
    - Location: Choose workspace
 
 2. **Add Devices:**
-   - Drag "BADASS Host" to canvas
-   - Drag "BADASS Router" to canvas
-
-3. **Connect Devices:**
-   - Use "Add a link" tool
-   - Connect Host-1 eth0 to Router-1 eth0
-   - Connect Host-2 eth0 to Router-1 eth1
+   - Drag "Host" to canvas
+   - Drag "Router" to canvas
 
 4. **Start All Devices:**
    - Right-click → Start all

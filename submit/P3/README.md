@@ -52,6 +52,7 @@ Imagine you have:
                               │
               ┌───────────────┼───────────────┐
               │               │               │
+ eth0 10.1.1.2/30    10.1.1.6/30    10.1.1.10/30
       ┌───────▼──────┐ ┌─────▼──────┐ ┌─────▼──────┐
       │   VTEP-2     │ │   VTEP-3   │ │   VTEP-4   │
       │  router-2    │ │  router-3  │ │  router-4  │
@@ -59,7 +60,6 @@ Imagine you have:
       │ Loopback:    │ │ Loopback:  │ │ Loopback:  │
       │  1.1.1.2/32  │ │  1.1.1.3/32│ │  1.1.1.4/32│
       └───────┬──────┘ └─────┬──────┘ └─────┬──────┘
- eth0 10.1.1.2/30    10.1.1.6/30    10.1.1.10/30
               │               │               │
               │ eth1          │ eth1          │ eth1
         ┌─────▼────┐   ┌─────▼─────┐  ┌─────▼─────┐
@@ -75,9 +75,9 @@ Imagine you have:
 | Component | Role | Interfaces | IP Addresses |
 |-----------|------|------------|--------------|
 | **router-1** | Route Reflector (Spine) | eth0, eth1, eth2, lo | eth0: 10.1.1.1/30, eth1: 10.1.1.5/30, eth2: 10.1.1.9/30, lo: 1.1.1.1/32 |
-| **router-2** | VTEP (Leaf Site 1) | eth0, eth1, lo, br0 | eth0: 10.1.1.2/30, lo: 1.1.1.2/32 |
-| **router-3** | VTEP (Leaf Site 2) | eth0, eth1, lo, br0 | eth0: 10.1.1.6/30, lo: 1.1.1.3/32 |
-| **router-4** | VTEP (Leaf Site 3) | eth0, eth1, lo, br0 | eth0: 10.1.1.10/30, lo: 1.1.1.4/32 |
+| **router-2** | VTEP (Leaf Site 1) | eth0, eth1, lo, br10 | eth0: 10.1.1.2/30, lo: 1.1.1.2/32 |
+| **router-3** | VTEP (Leaf Site 2) | eth0, eth1, lo, br10 | eth0: 10.1.1.6/30, lo: 1.1.1.3/32 |
+| **router-4** | VTEP (Leaf Site 3) | eth0, eth1, lo, br10 | eth0: 10.1.1.10/30, lo: 1.1.1.4/32 |
 | **host-1** | End device | eth0 | 20.1.1.1/24 |
 | **host-2** | End device | eth0 | 20.1.1.3/24 |
 | **host-3** | End device | eth0 | 20.1.1.2/24 |
@@ -134,14 +134,15 @@ This project assumes you have completed Parts 1 and 2:
 
 ### Step 3: Configure Network
 
-For this part, you can use the configuration scripts config_routers.sh and config_hosts.sh provided in the P3 directory. The configuration involves three layers:
+The configuration of routing-services (BGP and OSPF) is persistant and already configured in the GNS3 project. Interfaces can be configured with configuration scripts: config_routers.sh and config_hosts.sh are provided in the P3 directory.
+
+The configuration involves three layers:
 
 1. **Physical Interfaces & Loopbacks** (Underlay)
 2. **OSPF** (Underlay routing)
 3. **BGP-EVPN** (Control plane)
 4. **VXLAN** (Data plane)
 
-The scripts will automatically:
 - Configure IP addresses on all interfaces
 - Set up OSPF for loopback reachability
 - Configure BGP with EVPN address family
@@ -168,7 +169,7 @@ The scripts will automatically:
 📮 BGP-EVPN (Part 3):
    Smart system that automatically updates address book
    when new locations join or MACs move
-   "I'll tell everyone exactly who needs to know"
+   "I'll tell everyone exactly what they need to know"
 ```
 
 **Evolution of VXLAN:**
@@ -253,7 +254,7 @@ Now everyone knows:
 
 Now everyone knows:
 - router-2 is a VTEP at 1.1.1.2
-- It handles VNI 10
+- It handles VNI 10 (VXLAN ID)
 - Can establish VXLAN tunnels to it
 ```
 
@@ -636,7 +637,7 @@ vtysh -c "show evpn mac vni 10"
 
 # Should show local MAC
 # If not, check bridge:
-bridge fdb show br br0
+bridge fdb show br br10
 ```
 
 3. **Verify BGP Advertisement:**

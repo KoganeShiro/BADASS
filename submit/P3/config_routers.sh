@@ -30,7 +30,7 @@ router_rr() {
 router_a() {
     local container_name="$1"
     local hostname="$2"
-    echo "===Configuring Router B: $hostname==="
+    echo "===Configuring Router Leaf 1: $hostname==="
     docker exec -it "$container_name" sh -c "
         # Configure underlay IP address
         ip addr del 10.1.1.2/30 dev eth0 2>/dev/null || true &&
@@ -60,7 +60,7 @@ router_a() {
 router_b() {
     local container_name="$1"
     local hostname="$2"
-    echo "===Configuring Router B: $hostname==="
+    echo "===Configuring Router Leaf 2: $hostname==="
     docker exec -it "$container_name" sh -c "
         # Configure underlay IP address
         ip addr del 10.1.1.6/30 dev eth0 2>/dev/null || true &&
@@ -90,7 +90,7 @@ router_b() {
 router_c() {
     local container_name="$1"
     local hostname="$2"
-    echo "===Configuring Router C: $hostname==="
+    echo "===Configuring Router Leaf 3: $hostname==="
     docker exec -it "$container_name" sh -c "
         # Configure underlay IP address
         ip addr del 10.1.1.10/30 dev eth0 2>/dev/null || true &&
