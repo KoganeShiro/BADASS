@@ -1,0 +1,11 @@
+# Start from a lightweight Alpine Linux base image
+FROM alpine:latest
+
+# Install busybox (though Alpine already uses it by default)
+RUN apk add --no-cache busybox
+
+# Set busybox as the default entrypoint
+ENTRYPOINT ["busybox"]
+
+# Default command when container starts
+CMD ["sh"]
